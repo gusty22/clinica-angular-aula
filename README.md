@@ -57,3 +57,37 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+
+-- criar o diretório
+
+mkdir meu-app-angular
+
+-- entrar no diretório
+
+cd meu-app-angular
+
+-- criar o contâiner
+Linux: docker run -it --rm -v "${PWD}:/app" -w /app node:20-alpine sh
+  windows: docker run -it --rm -v "%cd%:/app" -w /app node:20-alpine sh
+
+-- instalar o angular e criando uma aplicação
+
+  npx @angular/cli new clinica --directory . --skip-git
+
+-- mostrar as pastas dentro do container
+
+rm -rf *
+
+-- sair depois da execução
+
+exit
+
+-- rodar aplicação
+linux: docker run -it --rm -v "${PWD}:/app" -w /app -p 4200:4200 node:20-alpine npx ng serve --host 0.0.0.0 --poll=2000 
+windows:docker run -it --rm -v "%cd%:/app" -w /app -p 4200:4200 node:20-alpine npx ng serve --host 0.0.0.0 --poll=2000
+
+docker run -it --rm -v "%CD%":/app -w /app node:20-alpine sh
+
+ng generate module administrativo
