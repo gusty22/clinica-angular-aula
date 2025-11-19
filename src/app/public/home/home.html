@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClinicaPi - Gestão Inteligente para sua Clínica Médica (Bootstrap 5)</title>
+    <meta name="description"
+        content="Organize pacientes, finanças e prontuários em um só lugar com o sistema de gestão ClinicaPi. Moderno, seguro e fácil de usar.">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Define a paleta de cores personalizada do Bootstrap */
+        :root {
+            --bs-primary: #0EA5E9;
+            --bs-primary-rgb: 14, 165, 233;
+            --bs-primary-dark: #0369A1;
+            --bs-primary-light: #E0F2FE;
+            --bs-secondary: #64748B;
+            --bs-dark: #1E293B;
+            --bs-light: #F8FAFC;
+            --bs-warning: #F59E0B;
+            /* Usando a cor 'accent' como 'warning' */
+        }
+
+        /* Aplica as fontes personalizadas e suavização */
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--bs-secondary);
+            background-color: var(--bs-light);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            /* Adicionado para Scrollspy */
+            position: relative;
+        }
+
+        /* Ajusta a cor dos links da navbar */
+        .navbar-nav .nav-link {
+            color: #6c757d;
+            /* Remove a borda padrão para criar a transição */
+            border-bottom: 2px solid transparent;
+            /* Adiciona transição para a cor da borda */
+            transition: border-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link.show {
+            color: var(--bs-primary-dark);
+            /* Cor escura para o link ativo */
+            border-bottom-color: var(--bs-primary);
+            /* Só muda a cor da borda */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--bs-dark);
+            /* Adiciona borda no hover também, se não estiver ativo */
+            /* border-bottom-color: #e9ecef; */
+            /* Opcional: borda cinza clara no hover */
+        }
+
+
+        /* Botões com cores personalizadas */
+        .btn-primary {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--bs-primary-dark);
+            border-color: var(--bs-primary-dark);
+        }
+
+        .btn-outline-primary {
+            color: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--bs-primary-light);
+            color: var(--bs-primary-dark);
+            border-color: var(--bs-primary);
+        }
+
+        /* Efeito suave de scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Ajuste para altura do Hero Section */
+        #hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Círculo de ícone para a seção 'About' */
+        .icon-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--bs-primary-light);
+            color: var(--bs-primary);
+        }
+
+        /* Animação sutil para cards (mantida do original) */
+        .feature-card:hover,
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Ajuste para o card 'Profissional' */
+        .plan-card-popular {
+            border-width: 2px;
+            transform: scale(1.03);
+            z-index: 10;
+        }
+
+        /* Sobrescreve a cor do texto padrão do 'lead' */
+        .lead {
+            color: var(--bs-secondary);
+        }
+
+        /* ### ALTERAÇÃO DE ESPAÇAMENTO CORRIGIDA ### */
+        /* Esta regra moderna (scroll-margin-top) corrige o problema de 
+           sobreposição do menu 'sticky-top' ao clicar em links de âncora (ex: #planos).
+           Define um "espaço" de 80px (5rem) acima de cada seção para o scroll parar. 
+           O 'padding-top/margin-top' hack anterior foi removido. */
+        section[id] {
+            scroll-margin-top: 5rem;
+            /* 80px. Ajuste se a altura do header (navbar) mudar. */
+        }
+
+        /* ### FIM DA ALTERAÇÃO ### */
+    </style>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#mainNavbar" data-bs-offset="75">
+
+    <header id="mainNavbar" class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+        <nav class="container-xl">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html"
+                style="color: var(--bs-primary-dark); font-weight: 700; font-size: 1.25rem;">
+                <i data-feather="activity" style="color: var(--bs-primary);"></i>
+                <span>ClinicaPi</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"
+                aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menu principal">
+                <i data-feather="menu"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mobileMenu">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-none d-lg-flex" style="gap: 1.5rem;">
+                    <li class="nav-item">
+                        <a class="nav-link active px-1 pt-1 pb-0" aria-current="page" href="#hero">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-1 pt-1 pb-0" href="#about">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-1 pt-1 pb-0" href="#features">Funcionalidades</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-1 pt-1 pb-0" href="#plans">Planos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-1 pt-1 pb-0" href="#contact">Fale Conosco</a>
+                    </li>
+                </ul>
+
+                <div class="d-lg-none mt-3 border-top pt-3">
+                    <a href="#hero" class="d-block py-2 px-3 text-secondary nav-link-mobile" data-bs-toggle="collapse"
+                        data-bs-target="#mobileMenu">Início</a>
+                    <a href="#about" class="d-block py-2 px-3 text-secondary nav-link-mobile" data-bs-toggle="collapse"
+                        data-bs-target="#mobileMenu">Sobre</a>
+                    <a href="#features" class="d-block py-2 px-3 text-secondary nav-link-mobile"
+                        data-bs-toggle="collapse" data-bs-target="#mobileMenu">Funcionalidades</a>
+                    <a href="#plans" class="d-block py-2 px-3 text-secondary nav-link-mobile" data-bs-toggle="collapse"
+                        data-bs-target="#mobileMenu">Planos</a>
+                    <a href="#contact" class="d-block py-2 px-3 text-secondary nav-link-mobile"
+                        data-bs-toggle="collapse" data-bs-target="#mobileMenu">Fale Conosco</a>
+                </div>
+
+                <div class="ms-lg-4 d-none d-lg-block">
+                    <a href="../login/login.html" class="btn btn-primary text-white px-4 py-2">
+                        Entrar no ClinicaPi
+                    </a>
+                </div>
+                <div class="d-lg-none mt-3 pt-3 border-top">
+                    <a href="../login/login.html" class="btn btn-primary text-white w-100">
+                        Entrar no ClinicaPi
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="bg-white pt-5 pb-5">
+            <div class="container-xl">
+                <div class="row align-items-center g-5 justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <h1 class="display-3 fw-bolder text-dark">
+                            Gestão <span style="color: var(--bs-primary);">inteligente</span> para sua clínica médica.
+                        </h1>
+                        <p class="lead fs-5 my-4">
+                            Organize pacientes, finanças e prontuários eletrônicos em um só lugar. Simplifique sua
+                            rotina e foque no que realmente importa: seus pacientes.
+                        </p>
+                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                            <a href="#features" class="btn btn-primary btn-lg px-4 py-3 shadow">
+                                Conheça o Sistema
+                            </a>
+                            <a href="#plans" class="btn btn-outline-primary btn-lg px-4 py-3">
+                                Ver Planos
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-5 bg-white">
+            <div class="container-xl text-center">
+                <h2 class="display-6 fw-bold text-dark">
+                    Modernize sua Clínica com Facilidade e Segurança
+                </h2>
+                <p class="lead fs-5 mx-auto mb-5" style="max-width: 48rem;">
+                    Nossa missão é simplificar a gestão de clínicas e consultórios médicos através de um sistema
+                    completo, intuitivo e seguro, permitindo que você dedique mais tempo ao cuidado dos seus pacientes.
+                </p>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="p-3">
+                            <div class="icon-circle mb-3">
+                                <i data-feather="zap" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="fs-5 fw-semibold text-dark mb-2">Facilidade de Uso</h3>
+                            <p class="small text-secondary">Interface intuitiva, pensada para profissionais da saúde,
+                                mesmo sem experiência em tecnologia.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="p-3">
+                            <div class="icon-circle mb-3">
+                                <i data-feather="shield" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="fs-5 fw-semibold text-dark mb-2">Segurança de Dados</h3>
+                            <p class="small text-secondary">Seus dados e de seus pacientes protegidos com tecnologia de
+                                ponta e backups automáticos.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="p-3">
+                            <div class="icon-circle mb-3">
+                                <i data-feather="headphones" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="fs-5 fw-semibold text-dark mb-2">Suporte Especializado</h3>
+                            <p class="small text-secondary">Nossa equipe está pronta para ajudar você a aproveitar ao
+                                máximo o sistema.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="p-3">
+                            <div class="icon-circle mb-3">
+                                <i data-feather="trending-up" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="fs-5 fw-semibold text-dark mb-2">Eficiência na Rotina</h3>
+                            <p class="small text-secondary">Automatize tarefas, reduza erros e ganhe tempo no seu dia a
+                                dia clínico e administrativo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="py-5 bg-light">
+            <div class="container-xl text-center">
+                <h2 class="display-6 fw-bold text-dark">
+                    Tudo que sua Clínica Precisa, em um Só Lugar
+                </h2>
+                <p class="lead fs-5 mx-auto mb-5" style="max-width: 48rem;">
+                    Explore os módulos essenciais do CliniPI, projetados para otimizar cada aspecto da sua gestão.
+                </p>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card feature-card h-100 shadow-sm border-light-subtle">
+                            <div class="card-body p-4 p-lg-5 text-center">
+                                <i data-feather="users" class="mb-4"
+                                    style="width: 40px; height: 40px; color: var(--bs-primary);"></i>
+                                <h3 class="fs-5 fw-semibold text-dark mb-2">Gestão de Pacientes</h3>
+                                <p class="small text-secondary mb-3">Cadastro completo, histórico, agendamentos e
+                                    comunicação simplificada.</p>
+                                <a href="funcionalidades.html#pacientes" class="fw-medium small"
+                                    style="color: var(--bs-primary);">Saiba mais &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card feature-card h-100 shadow-sm border-light-subtle">
+                            <div class="card-body p-4 p-lg-5 text-center">
+                                <i data-feather="dollar-sign" class="mb-4"
+                                    style="width: 40px; height: 40px; color: var(--bs-primary);"></i>
+                                <h3 class="fs-5 fw-semibold text-dark mb-2">Controle Financeiro</h3>
+                                <p class="small text-secondary mb-3">Gerencie contas a pagar e receber, fluxo de caixa e
+                                    faturamento de forma clara.</p>
+                                <a href="funcionalidades.html#financeiro" class="fw-medium small"
+                                    style="color: var(--bs-primary);">Saiba mais &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card feature-card h-100 shadow-sm border-light-subtle">
+                            <div class="card-body p-4 p-lg-5 text-center">
+                                <i data-feather="clipboard" class="mb-4"
+                                    style="width: 40px; height: 40px; color: var(--bs-primary);"></i>
+                                <h3 class="fs-5 fw-semibold text-dark mb-2">Prontuário Eletrônico</h3>
+                                <p class="small text-secondary mb-3">Registro seguro e organizado do histórico médico,
+                                    prescrições e anexos.</p>
+                                <a href="funcionalidades.html#prontuarios" class="fw-medium small"
+                                    style="color: var(--bs-primary);">Saiba mais &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card feature-card h-100 shadow-sm border-light-subtle">
+                            <div class="card-body p-4 p-lg-5 text-center">
+                                <i data-feather="file-text" class="mb-4"
+                                    style="width: 40px; height: 40px; color: var(--bs-primary);"></i>
+                                <h3 class="fs-5 fw-semibold text-dark mb-2">Notas Fiscais</h3>
+                                <p class="small text-secondary mb-3">Emissão e gerenciamento simplificado de notas
+                                    fiscais de serviço (NFSe).</p>
+                                <a href="funcionalidades.html#notas" class="fw-medium small"
+                                    style="color: var(--bs-primary);">Saiba mais &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card feature-card h-100 shadow-sm border-light-subtle">
+                            <div class="card-body p-4 p-lg-5 text-center">
+                                <i data-feather="bar-chart-2" class="mb-4"
+                                    style="width: 40px; height: 40px; color: var(--bs-primary);"></i>
+                                <h3 class="fs-5 fw-semibold text-dark mb-2">Relatórios Gerenciais</h3>
+                                <p class="small text-secondary mb-3">Visualize indicadores chave sobre finanças,
+                                    atendimentos e desempenho.</p>
+                                <a href="funcionalidades.html#relatorios" class="fw-medium small"
+                                    style="color: var(--bs-primary);">Saiba mais &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card feature-card h-100 shadow-sm border-light-subtle">
+                            <div class="card-body p-4 p-lg-5 text-center">
+                                <i data-feather="settings" class="mb-4"
+                                    style="width: 40px; height: 40px; color: var(--bs-primary);"></i>
+                                <h3 class="fs-5 fw-semibold text-dark mb-2">Configurações</h3>
+                                <p class="small text-secondary mb-3">Personalize o sistema, gerencie usuários e
+                                    permissões de acesso.</p>
+                                <a href="funcionalidades.html#config" class="fw-medium small"
+                                    style="color: var(--bs-primary);">Saiba mais &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="plans" class="py-5 bg-white">
+            <div class="container-xl text-center">
+                <h2 class="display-6 fw-bold text-dark">
+                    Planos Flexíveis para sua Necessidade
+                </h2>
+                <p class="lead fs-5 mx-auto mb-5" style="max-width: 48rem;">
+                    Escolha o plano que melhor se adapta ao tamanho e às demandas da sua clínica. Comece hoje mesmo!
+                </p>
+
+                <div class="row g-4 justify-content-center">
+                    <div class="col-lg-4">
+                        <div class="card plan-card h-100 d-flex flex-column shadow-sm border-light-subtle p-4">
+                            <div class="card-body d-flex flex-column">
+                                <h3 class="fs-5 fw-semibold text-dark mb-2">Básico</h3>
+                                <p class="small text-secondary mb-4">Ideal para consultórios individuais ou pequenas
+                                    equipes.</p>
+                                <div class="my-3">
+                                    <span class="display-5 fw-bolder text-dark">R$ 99</span>
+                                    <span class="text-secondary">/mês</span>
+                                </div>
+                                <ul class="list-unstyled text-start small text-secondary flex-grow-1 mb-4">
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Gestão de Pacientes
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Agenda Médica
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Prontuário Eletrônico Simplificado
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2 text-muted">
+                                        <i data-feather="x" class="me-2" style="width: 16px;"></i> Controle Financeiro
+                                        Básico
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2 text-muted">
+                                        <i data-feather="x" class="me-2" style="width: 16px;"></i> Relatórios
+                                    </li>
+                                </ul>
+                                <a href="cadastro.html" class="btn btn-outline-primary mt-auto">
+                                    Assinar Plano Básico
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div
+                            class="card plan-card plan-card-popular h-100 d-flex flex-column shadow-lg border-primary p-4 position-relative">
+                            <span
+                                class="badge bg-warning text-dark position-absolute top-0 end-0 translate-middle-y me-n2 rounded-pill px-3 py-1 small fw-semibold"
+                                style="font-size: 0.75rem;">
+                                Mais Popular
+                            </span>
+                            <div class="card-body d-flex flex-column">
+                                <h3 class="fs-5 fw-semibold text-dark mb-2">Profissional</h3>
+                                <p class="small text-secondary mb-4">Completo para clínicas que buscam eficiência total.
+                                </p>
+                                <div class="my-3">
+                                    <span class="display-5 fw-bolder text-dark">R$ 199</span>
+                                    <span class="text-secondary">/mês</span>
+                                </div>
+                                <ul class="list-unstyled text-start small text-secondary flex-grow-1 mb-4">
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Todos os recursos do Básico
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Controle Financeiro Completo
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Emissão de Notas Fiscais
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Relatórios Gerenciais
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Suporte Prioritário
+                                    </li>
+                                </ul>
+                                <a href="cadastro.html" class="btn btn-primary shadow-sm mt-auto">
+                                    Assinar Plano Profissional
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card plan-card h-100 d-flex flex-column shadow-sm border-light-subtle p-4">
+                            <div class="card-body d-flex flex-column">
+                                <h3 class="fs-5 fw-semibold text-dark mb-2">Enterprise</h3>
+                                <p class="small text-secondary mb-4">Para clínicas maiores com necessidades avançadas.
+                                </p>
+                                <div class="my-3">
+                                    <span class="display-6 fw-bolder text-dark">Sob Consulta</span>
+                                </div>
+                                <ul class="list-unstyled text-start small text-secondary flex-grow-1 mb-4">
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Todos os recursos do Profissional
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Múltiplos Usuários Avançado
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Integrações Personalizadas
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Gestor de Contas Dedicado
+                                    </li>
+                                    <li class="d-flex align-items-center mb-2">
+                                        <i data-feather="check" class="text-success me-2" style="width: 16px;"></i>
+                                        Suporte Premium 24/7
+                                    </li>
+                                </ul>
+                                <a href="contato.html" class="btn btn-outline-primary mt-auto">
+                                    Solicitar Orçamento
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-5 bg-light">
+            <div class="container-xl">
+                <div class="row g-5 align-items-start">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm border-light-subtle p-4 p-md-5">
+                            <h2 class="h4 fw-bold text-dark mb-4">Envie sua Mensagem</h2>
+                            <form action="#" method="POST" class="row g-3">
+                                <div class="col-12">
+                                    <label for="name" class="form-label small">Nome</label>
+                                    <input type="text" name="name" id="name" required class="form-control">
+                                </div>
+                                <div class="col-12">
+                                    <label for="email" class="form-label small">E-mail</label>
+                                    <input type="email" name="email" id="email" required class="form-control">
+                                </div>
+                                <div class="col-12">
+                                    <label for="message" class="form-label small">Mensagem</label>
+                                    <textarea name="message" id="message" rows="4" required
+                                        class="form-control"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary w-100 py-2">
+                                        Enviar Mensagem
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 pt-md-4">
+                        <h2 class="h4 fw-bold text-dark mb-3">Entre em Contato</h2>
+                        <p class="text-secondary mb-4">
+                            Tem alguma dúvida ou precisa de ajuda para escolher o melhor plano? Nossa equipe está pronta
+                            para atender você.
+                        </p>
+                        <div class="d-flex flex-column gap-3">
+                            <div class="d-flex align-items-start gap-3">
+                                <i data-feather="phone" class="flex-shrink-0 mt-1"
+                                    style="color: var(--bs-primary);"></i>
+                                <div>
+                                    <h3 class="fs-6 fw-semibold text-dark mb-0">Telefone</h3>
+                                    <p class="small text-secondary mb-0">(XX) 3000-0000 | (XX) 90000-0000 (WhatsApp)
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-start gap-3">
+                                <i data-feather="mail" class="flex-shrink-0 mt-1" style="color: var(--bs-primary);"></i>
+                                <div>
+                                    <h3 class="fs-6 fw-semibold text-dark mb-0">E-mail</h3>
+                                    <p class="small text-secondary mb-0">contato@ClinicaPi.com.br</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <h3 class="fs-6 fw-semibold text-dark mb-2">Siga-nos</h3>
+                            <div class="d-flex gap-3">
+                                <a href="#" class="text-secondary" style="color: var(--bs-primary-dark);"><i
+                                        data-feather="facebook" class="w-6 h-6"></i></a>
+                                <a href="#" class="text-secondary" style="color: var(--bs-primary-dark);"><i
+                                        data-feather="instagram" class="w-6 h-6"></i></a>
+                                <a href="#" class="text-secondary" style="color: var(--bs-primary-dark);"><i
+                                        data-feather="linkedin" class="w-6 h-6"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-dark text-white-50">
+        <div class="container-xl py-4">
+            <div
+                class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 text-center text-md-start">
+                <div>
+                    <a class="d-flex justify-content-center justify-content-md-start align-items-center gap-2 text-white text-decoration-none fw-bold fs-5 mb-2"
+                        href="index.html">
+                        <i data-feather="activity" style="color: var(--bs-primary);"></i>
+                        <span>ClinicaPi</span>
+                    </a>
+                    <p class="small mb-0">&copy; 2025 ClinicaPi. Todos os direitos reservados.</p>
+                </div>
+                <div class="d-flex flex-wrap justify-content-center justify-content-md-end gap-3 small">
+                    <a href="#hero" class="nav-link text-white-50 px-0">Início</a>
+                    <a href="#features" class="nav-link text-white-50 px-0">Funcionalidades</a>
+                    <a href="#plans" class="nav-link text-white-50 px-0">Planos</a>
+                    <a href="#contact" class="nav-link text-white-50 px-0">Fale Conosco</a>
+                    <a href="#" class="nav-link text-white-50 px-0">Política de Privacidade</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script>
+        feather.replace();
+
+        // Opcional: Adiciona classe 'active' ao link clicado no menu mobile
+        // E garante que o scrollspy atualize corretamente após o clique
+        document.querySelectorAll('.nav-link-mobile').forEach(link => {
+            link.addEventListener('click', function () {
+                // Remove 'active' de todos os links mobile
+                document.querySelectorAll('.nav-link-mobile').forEach(el => el.classList.remove('active', 'text-dark', 'fw-medium', 'bg-light', 'rounded-2'));
+                document.querySelectorAll('.nav-link-mobile').forEach(el => el.classList.add('text-secondary')); // Garante q volta a ser cinza
+
+                // Adiciona 'active' e estilos ao link clicado
+                this.classList.add('active', 'text-dark', 'fw-medium', 'bg-light', 'rounded-2');
+                this.classList.remove('text-secondary');
+
+                // Força o Scrollspy a atualizar após o scroll suave terminar (timeout pequeno)
+                setTimeout(() => {
+                    const scrollSpy = bootstrap.ScrollSpy.getInstance(document.body);
+                    if (scrollSpy) {
+                        scrollSpy.refresh();
+                    }
+                }, 500); // Ajuste o tempo se necessário
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
