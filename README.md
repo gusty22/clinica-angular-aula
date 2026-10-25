@@ -1,93 +1,27 @@
-# App
+# Clínica Angular — Exercício de Módulos e Rotas
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.9.
+Projeto acadêmico de desenvolvimento frontend com Angular, organizado em áreas pública e privada.
 
-## Development server
+## O que foi encontrado no código
 
-To start a local development server, run:
+- Configuração de aplicação e rotas em `src/app/`.
+- Página pública de apresentação (`src/app/public/home/`).
+- Módulos organizados em `src/app/private/`: administrativo, agendamento e atendente.
+- Configuração de Angular CLI e TypeScript.
 
-```bash
-ng serve
-```
+**Atenção:** a estrutura indica áreas planejadas ou implementadas como módulos, mas não confirma integração com servidor, cadastro persistente ou autenticação funcional.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Rodar
 
 ```bash
-ng generate component component-name
+git clone https://github.com/gusty22/clinica-angular-aula.git
+cd clinica-angular-aula
+npm ci
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Abra o endereço exibido pelo Angular CLI, normalmente `http://localhost:4200/`.
 
-```bash
-ng generate --help
-```
+## Objetivo
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-
-
--- criar o diretório
-
-mkdir meu-app-angular
-
--- entrar no diretório
-
-cd meu-app-angular
-
--- criar o contâiner
-Linux: docker run -it --rm -v "${PWD}:/app" -w /app node:20-alpine sh
-  windows: docker run -it --rm -v "%cd%:/app" -w /app node:20-alpine sh
-
--- instalar o angular e criando uma aplicação
-
-  npx @angular/cli new clinica --directory . --skip-git
-
--- mostrar as pastas dentro do container
-
-rm -rf *
-
--- sair depois da execução
-
-exit
-
--- rodar aplicação
-linux: docker run -it --rm -v "${PWD}:/app" -w /app -p 4200:4200 node:20-alpine npx ng serve --host 0.0.0.0 --poll=2000 
-windows:docker run -it --rm -v "%cd%:/app" -w /app -p 4200:4200 node:20-alpine npx ng serve --host 0.0.0.0 --poll=2000
-
-docker run -it --rm -v "%CD%":/app -w /app node:20-alpine sh
-
-ng generate module administrativo
+Praticar componentes, navegação, modularização e estrutura inicial de interfaces para gestão clínica. Projeto de sala de aula, não um sistema clínico pronto para produção.
